@@ -1,0 +1,61 @@
+Let it Burn Game change log
+
+2017-05-09
+	- Created readme, changelog, and todo.
+	- Status: Classes tile, map, coord, coord_set finished. Main able to read in floor plan file.
+	
+2017-05-09
+	- Added "Player" class.
+	- Added functionality to player class initialization, four "move" functions, and "get_mask" function.
+		- Note: "move" functions will return int of position changed for "game" class to evaluate against the map edges.
+		
+2017-05-10
+	- Changed player class. move functions no longer return int. Instead, "game" class checks potential next tile for condition, then evaluates if player can move onto it.
+	
+2017-05-11
+	- game class "move_player()" now checks if player is at bounds or if he is up against a wall.
+		- Must add checks so player can't move onto fire, closed doors, or smoke without a smoke mask.
+		- Must add ability for player to open closed doors. Takes one turn to open door.
+		- requires testing.
+	- game class "print_map()" now displays player location.
+		- requires testing.
+	- Added functionality for "move_player()" to check for fire, damaged walls, and closed doors.
+	- "move_player()" now opens closed doors. (Takes one turn to open doors.)
+	
+2017-05-12
+	- "move_player()" function in "game" class now checks for smoke mask on player and allows movement through smoked tiles.
+	- "tile" objects now have a boolean to denote if they have a smoke mask on them. Relevant functions for setting and getting this bool have also been implemented.
+		- Masks are initialized when the board and tile are loaded.
+			- Add way to place new masks on tiles.
+	- "game" class fuction "move_player()" now changes player mask bool when picking up a mask, as well as removing mask from the tile after they have been picked up.
+	- "game" class fuction "print_map()" now checks if a tile has a mask and prints an identifier accordingly.
+	
+2017-05-13
+	- added game class initializer which only has two ints, one for size x and one for size y. "user" is initialized to (0,0).
+	- Fixed game initializers to correctly initialize player "user."
+	
+2017-05-14
+	- Changed player class to return bool for main to interpret instead of printing an requesting new input itself.
+	- Added exit bool to tiles which indicates if the tile is an exit. Added relevant functions for setting and getting exit status.
+	- Changed player::print_map() to display exit tiles on print.
+	- After testing player movement, redid game::move_player() to correctly check bounds and obstructions.
+	- Changed game::print_map() to display the map elements in a continuous manner.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

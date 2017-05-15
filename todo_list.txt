@@ -1,0 +1,15 @@
+Let it Burn Game to do list
+
+2017-05-08
+	+ Add input sorting to take different parameters.
+	+ Add "player" class to keep track of player position. Add required functionality to other classes to interact with it as required.
+	+ Create seperate game mode for slow fire spread. Integrate it into current main using factory methods, prototyping, and inheritance.
+	+ Add "exit" tile for player to move towards.
+	+ Add "Smoke_mask" tile for player to obtain. Smoke masks allow players to move through smoke tiles.
+	
+2017-05-11
+	- Player class added.
+		+ Add check for smoke mask when moving through smoke tiles.
+
+2017-05-14
+	+ Change game::print_map() to return a string of the map instead of printing the map itself.
