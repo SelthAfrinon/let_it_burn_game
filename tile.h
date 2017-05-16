@@ -34,8 +34,8 @@ public:
 	int get_x();
 	int get_y();
 	int get_cond();
+	void set_mask(bool);
 	bool has_mask();
-	void rem_mask();
 	void make_exit();
 	bool is_exit();
 	~tile() {}

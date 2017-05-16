@@ -41,7 +41,19 @@ Let it Burn Game change log
 	- After testing player movement, redid game::move_player() to correctly check bounds and obstructions.
 	- Changed game::print_map() to display the map elements in a continuous manner.
 	
-	
+2017-05-16
+	- Added functions to "player" class to allow setting of pos_x and pos_y variables.
+	- Added functions to "tile" class to set a tile as an exit or as a mask.
+	- Changed Main's "floorplan reading" section to read positions for exit tiles, masks, and player start tiles.
+		- Exit tiles are marked as cond 100.
+		- Mask tiles are marked as cond 1000.
+		- Player start tiles are marked as cond 10000.
+	- Changed "game::move_player()" to return an int which signifies the condition:
+		- returns 0 if the player has not moved.
+		- returns 1 if the player has moved.
+		- returns 2 if the player has moved onto an exit tile.
+	- Changed main's "player movement" phase to accomodate the above changes.
+	- Added exit dialouge to be displayed when the player reaches an exit tile.
 	
 	
 	

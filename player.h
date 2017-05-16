@@ -21,6 +21,8 @@ public:
 	void move_right();
 	int get_x();
 	int get_y();
+	void set_x(int);
+	void set_y(int);
 	void get_mask();
 	bool has_mask();
 	~player() {}

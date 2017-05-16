@@ -69,12 +69,12 @@ int tile::get_cond(){
 	return cond;
 }
 
-bool tile::has_mask(){
-	return mask;
+void tile::set_mask(bool in){
+	mask = in;
 }
 
-void tile::rem_mask(){
-	mask = false;
+bool tile::has_mask(){
+	return mask;
 }
 
 void tile::make_exit(){

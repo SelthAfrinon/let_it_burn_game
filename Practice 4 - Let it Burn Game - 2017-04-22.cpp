@@ -10,6 +10,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <string>
+
 #include "coord.h"
 #include "coord_set.h"
 #include "tile.h"
@@ -37,12 +39,20 @@ int main() {
 
 	while(!fp_file.eof()){
 		getline(fp_file, fp_line);
-		int cond = fp_line[0] - '0';
+		int cond = atoi(fp_line.substr(0,fp_line.find(" ")).c_str());
 		getline(fp_file, fp_line);
 		do{
 			int x = atoi(fp_line.substr(0,fp_line.find(" ")).c_str());
 			int y = atoi(fp_line.substr(fp_line.find(" ") + 1).c_str());
-			cur_game->fill_tile(x, y, cond);
+			if(cond == 100){
+				cur_game->set_exit(x,y);
+			}else if(cond == 1000){
+				cur_game->set_mask(x,y);
+			}else if(cond == 10000){
+				cur_game->set_user(x,y);
+			}else{
+				cur_game->fill_tile(x, y, cond);
+			}
 			getline(fp_file, fp_line);
 		}while(fp_line != "END");
 	}
@@ -50,21 +60,22 @@ int main() {
 
 	// Start player turn
 	string move;
-	bool has_moved = true;
+	int has_moved = 1;
 	cur_game->print_map();
-	cout << "Enter your move: ";
-	while(true){
+	while(has_moved != 2){
 		do{
-			if(!has_moved){
+			if(has_moved == 0){
 				cout << "Obstruction in the way!\nEnter another direction: ";
+			}else{
+				cout << "Enter your move: ";
 			}
 			cin >> move;
 			cout << endl;
 			has_moved = cur_game->move_player(move);
-		}while(!has_moved);
+		}while(has_moved == 0);
 		cur_game->print_map();
 	}
-
+	cout << "You escaped!\nGame over.";
 
 	return 0;
 }

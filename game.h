@@ -28,8 +28,11 @@ public:
 	void fill_tile(int, int, int);
 	void smoke_tile(int, int);
 	void smoke_all();
+	void set_mask(int, int);
+	void set_exit(int, int);
+	void set_user(int, int);
 	void eval_tile(int, int, coord*, bool);
-	bool move_player(std::string);
+	int move_player(std::string);
 	void print_map();
 	~game();
 };

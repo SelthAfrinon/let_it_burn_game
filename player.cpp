@@ -21,6 +21,14 @@ int player::get_y(){
 	return pos_y;
 }
 
+void player::set_x(int x){
+	pos_x = x;
+}
+
+void player::set_y(int y){
+	pos_y = y;
+}
+
 void player::move_up(){
 	pos_y++;
 }
