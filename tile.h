@@ -24,20 +24,24 @@ private:
 	int cond,x,y;
 	bool mask, exit;
 public:
+	// initializers set up tile location.
 	tile(coord*);
 	tile(int, int);
-	tile(coord*, bool, bool);
-	tile(int, int, bool, bool);
+
+	// setters to set smoke, general floorplan pieces, mask status, and exit status.
 	void apply_smoke();
 	void apply_fp(int);
+	void set_mask(bool);
+	void make_exit();
+
+	// gettter functions to get information of tile.
 	coord* get_coord();
 	int get_x();
 	int get_y();
 	int get_cond();
-	void set_mask(bool);
-	bool has_mask();
-	void make_exit();
-	bool is_exit();
+	bool get_exit();
+	bool get_mask();
+
 	~tile() {}
 };
 

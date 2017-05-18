@@ -54,14 +54,20 @@ Let it Burn Game change log
 		- returns 2 if the player has moved onto an exit tile.
 	- Changed main's "player movement" phase to accomodate the above changes.
 	- Added exit dialouge to be displayed when the player reaches an exit tile.
+	- Changed floorplan reader from using old "fp_line[0]-'0'" method of setting conditions to using "atoi()" function with space searching.
+		- Necessary because the old method could not handle numbers greater than nine.
+	- Began refactoring code to remove extraneous functions and inclusions.
+		- Refactored "tile" and "coord" class.
 	
+2017-05-17
+	- Continued refactoring classes.
+		- Refactored "coord_set" and "map" classes.
+		- Refactored "player" class.
+		- Refactored "game" class and main.
 	
-	
-	
-	
-	
-	
-	
+2017-05-18
+	- Changed "game::print_map()" to return a string.
+		- Changed main to correctly display the returned string.
 	
 	
 	

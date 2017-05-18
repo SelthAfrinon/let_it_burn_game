@@ -8,19 +8,19 @@
 #ifndef COORD_H_
 #define COORD_H_
 
-#include <iostream>
-
 class coord{
 private:
 	int x;
 	int y;
 
 public:
+	// initializers
 	coord();
 	coord(int, int);
+
+	// getters
 	int get_x();
 	int get_y();
-	void print_coord();
 	~coord();
 };
 

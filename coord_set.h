@@ -15,11 +15,16 @@ class coord_set{
 private:
 	std::vector<coord*> set;
 public:
+	// initializers
 	coord_set();
+
+	// manipulators
 	void add_coord(coord*);
+
+	// getters
 	coord* get_coord(int);
 	int get_size();
-	bool is_empty();
+	bool get_empty();
 	~coord_set();
 };
 

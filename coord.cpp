@@ -7,24 +7,22 @@
 
 #include "coord.h"
 
+// initializers
 coord::coord(){
 	x = 0;
 	y = 0;
 }
 
-coord::coord(int n_x,int n_y){
-	x = n_x;
-	y = n_y;
+coord::coord(int x,int y){
+	this->x = x;
+	this->y = y;
 }
 
+// getters
 int coord::get_x(){
 	return x;
 }
 
 int coord::get_y(){
 	return y;
-}
-
-void coord::print_coord(){
-	std::cout << "(" << x << "," << y << ")";
 }

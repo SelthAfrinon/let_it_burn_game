@@ -7,49 +7,57 @@
 
 #include "player.h"
 
-player::player(int start_x, int start_y){
-	pos_x = start_x;
-	pos_y = start_y;
+// constructors
+
+player::player(int x, int y){
+	this->x = x;
+	this->y = y;
 	mask = false;
 }
 
-int player::get_x(){
-	return pos_x;
-}
-
-int player::get_y(){
-	return pos_y;
-}
+// setters
 
 void player::set_x(int x){
-	pos_x = x;
+	this->x = x;
 }
 
 void player::set_y(int y){
-	pos_y = y;
+	this->y = y;
 }
 
+// manipulators
+
 void player::move_up(){
-	pos_y++;
+	y++;
 }
 
 void player::move_down(){
-	pos_y--;
+	y--;
 }
 
 void player::move_left(){
-	pos_x--;
+	x--;
 }
 
 void player::move_right(){
-	pos_x++;
+	x++;
 }
 
-void player::get_mask(){
+void player::give_mask(){
 	mask = true;
 }
 
-bool player::has_mask(){
+// getters
+
+int player::get_x(){
+	return x;
+}
+
+int player::get_y(){
+	return y;
+}
+
+bool player::get_mask(){
 	return mask;
 }
 

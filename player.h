@@ -10,21 +10,30 @@
 
 class player{
 private:
-	int pos_x, pos_y;
+	int x, y;
 	bool mask;
 
 public:
+	// constructors
 	player(int, int);
+
+	// setters
+	void set_x(int);
+	void set_y(int);
+
+	// manipulators
 	void move_up();
 	void move_down();
 	void move_left();
 	void move_right();
+	void give_mask();
+
+	// getters
 	int get_x();
 	int get_y();
-	void set_x(int);
-	void set_y(int);
-	void get_mask();
-	bool has_mask();
+	bool get_mask();
+
+	// deconstructors
 	~player() {}
 
 };

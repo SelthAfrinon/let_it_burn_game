@@ -45,11 +45,11 @@ int main() {
 			int x = atoi(fp_line.substr(0,fp_line.find(" ")).c_str());
 			int y = atoi(fp_line.substr(fp_line.find(" ") + 1).c_str());
 			if(cond == 100){
-				cur_game->set_exit(x,y);
+				cur_game->set_tile_exit(x,y);
 			}else if(cond == 1000){
-				cur_game->set_mask(x,y);
+				cur_game->set_tile_mask(x,y);
 			}else if(cond == 10000){
-				cur_game->set_user(x,y);
+				cur_game->set_tile_user(x,y);
 			}else{
 				cur_game->fill_tile(x, y, cond);
 			}
@@ -61,8 +61,8 @@ int main() {
 	// Start player turn
 	string move;
 	int has_moved = 1;
-	cur_game->print_map();
-	while(has_moved != 2){
+	cout << cur_game->print_map();
+	do{
 		do{
 			if(has_moved == 0){
 				cout << "Obstruction in the way!\nEnter another direction: ";
@@ -73,9 +73,14 @@ int main() {
 			cout << endl;
 			has_moved = cur_game->move_player(move);
 		}while(has_moved == 0);
-		cur_game->print_map();
+		cout << cur_game->print_map();
+	}while((has_moved != 2) & (has_moved != 3));
+
+	if(has_moved == 3){
+		cout << "You quit.\nGame over.";
+	}else{
+		cout << "You escaped!\nGame over.";
 	}
-	cout << "You escaped!\nGame over.";
 
 	return 0;
 }

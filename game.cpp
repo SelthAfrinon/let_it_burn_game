@@ -7,6 +7,8 @@
 
 #include "game.h"
 
+// Constructors
+
 game::game(int x, int y):board(x, y),user(0,0){
 
 	max_x = x;
@@ -14,11 +16,22 @@ game::game(int x, int y):board(x, y),user(0,0){
 	turn_count = 0;
 }
 
-game::game(int x, int y, int play_start_x, int play_start_y):board(x, y),user(play_start_x, play_start_y){
-	max_x = x;
-	max_y = y;
-	turn_count = 0;
+// Setters
+
+void game::set_tile_mask(int x, int y){
+	board.get_tile(x,y)->set_mask(true);
 }
+
+void game::set_tile_exit(int x, int y){
+	board.get_tile(x,y)->make_exit();
+}
+
+void game::set_tile_user(int x, int y){
+	user.set_x(x);
+	user.set_y(y);
+}
+
+// manipulators
 
 void game::fill_tile(int x, int y, int cond){
 	board.get_tile(x, y)->apply_fp(cond);
@@ -27,7 +40,7 @@ void game::fill_tile(int x, int y, int cond){
 void game::smoke_tile(int x, int y){
 	board.get_tile(x,y)->apply_smoke();
 	turn_count++;
-	eval_tile(x,y, new coord(x,y), true);
+	eval_tile(new coord(x,y), true);
 
 }
 
@@ -39,12 +52,116 @@ void game::smoke_all(){
 	}
 }
 
-void game::eval_tile(int x, int y, coord* origin, bool x_fix){
-	tile* cur_tile = board.get_tile(x,y);
-	int cond = board.get_tile(x, y)->get_cond();
+// uses "wasd" controls
+int game::move_player(std::string in){
+	int mov_x = user.get_x(), mov_y = user.get_y();
+	int moved = 0;
+	if(in == "w"){
+		if(mov_y!= max_y - 1){
+			int tile_cond = board.get_cond(mov_x, mov_y + 1);
+			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.get_mask()))){
+				user.move_up();
+				moved = 1;
+			}else if(tile_cond == 3){
+				board.get_tile(mov_x, mov_y + 1)->apply_fp(4);
+				moved = 1;
+			}
+		}
+	}else if(in == "s"){
+		if(mov_y!= 0){
+			int tile_cond = board.get_cond(mov_x, mov_y - 1);
+			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.get_mask()))){
+				user.move_down();
+				moved = 1;
+			}else if(tile_cond == 3){
+				board.get_tile(mov_x, mov_y - 1)->apply_fp(4);
+				moved = 1;
+			}
+		}
+	}else if (in == "a"){
+		if(mov_x!= 0){
+			int tile_cond = board.get_cond(mov_x - 1, mov_y);
+			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.get_mask()))){
+				user.move_left();
+				moved = 1;
+			}else if(tile_cond == 3){
+				board.get_tile(mov_x - 1, mov_y)->apply_fp(4);
+				moved = 1;
+			}
+		}
+	}else if (in == "d"){
+		if(mov_x != max_x - 1){
+			int tile_cond = board.get_cond(mov_x + 1, mov_y);
+			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.get_mask()))){
+				user.move_right();
+				moved = 1;
+			}else if(tile_cond == 3){
+				board.get_tile(mov_x + 1, mov_y)->apply_fp(4);
+				moved = 1;
+			}
+		}
+	}else if(in == "q"){
+			moved = 3;
+	}else{
+		moved = 0;
+	}
+
+	if(moved & (board.get_tile(user.get_x(), user.get_y())->get_mask())){
+		user.get_mask();
+		board.get_tile(user.get_x(), user.get_y())->set_mask(false);
+	}else if(moved & (board.get_tile(user.get_x(), user.get_y())->get_exit())){
+		moved = 2;
+	}
+	return moved;
+}
+
+std::string game::print_map(){
+	std::string symbols = "SF#|/=_ X0DB";
+	char buffer[50];
+	sprintf(buffer, "%d\n", turn_count);
+	std::string out = "Turn: ";
+	out += buffer;
+	if(user.get_mask()){
+		out += "Player has a smoke mask.\n";
+	}else{
+		out += "Player does not have a smoke mask.\n";
+	}
+	for(int i = max_y; i >= -1; i--){
+		for(int j = -1; j <= max_x; j++){
+			if(i == max_y || i == -1){
+				out += "II";
+			}else if(j == -1 || j == max_x){
+				out += "II";
+			}else{
+				if((user.get_x() == j) & (user.get_y() == i)){
+					out += "P ";
+				}else if(board.get_tile(j,i)->get_mask()){
+					out += "MM";
+				}else if(board.get_tile(j,i)->get_exit()){
+					out += "EE";
+				}else{
+					out += symbols[board.get_tile(j,i)->get_cond()];
+					out += symbols[board.get_tile(j,i)->get_cond()];
+				}
+				//out += " ";
+			}
+		}
+		out += "\n";
+	}
+	out += "\n";
+	return out;
+}
+
+// Tile Evaluators
+
+void game::eval_tile(coord* origin, bool x_fix){
+	tile* cur_tile = board.get_tile(origin);
+	int cond = cur_tile->get_cond(),
+			x = cur_tile->get_x(),
+			y = cur_tile->get_y();
 	coord_set* to_check = new coord_set();
 
-	if((x != 0) & (x - 1 != origin->get_x())){
+	if(x != 0){
 		to_check->add_coord(new coord(x - 1, y));
 	}
 
@@ -78,7 +195,7 @@ void game::eval_tile(int x, int y, coord* origin, bool x_fix){
 			}else if(check_tile->get_cond() == 6){
 				sur_check ->add_coord(check_tile->get_coord());
 			}
-			eval_set(sur_check);
+			eval_set(sur_check, false);
 		}
 	}else if(cond == 1){
 		tile* check_tile;
@@ -89,7 +206,7 @@ void game::eval_tile(int x, int y, coord* origin, bool x_fix){
 				sur_check->add_coord(check_tile->get_coord());
 			}
 		}
-		eval_set(sur_check);
+		eval_set(sur_check, false);
 	}else if(cond == 6){
 		tile* check_tile;
 		for(int i = 0; i < to_check->get_size(); i++){
@@ -103,7 +220,7 @@ void game::eval_tile(int x, int y, coord* origin, bool x_fix){
 						sur_check->add_coord(check_tile->get_coord());
 					}
 				}
-				eval_set(sur_check);
+				eval_set(sur_check, false);
 				break;
 			}
 		}
@@ -124,7 +241,7 @@ void game::eval_tile(int x, int y, coord* origin, bool x_fix){
 				sur_check->add_coord(check_tile->get_coord());
 			}
 		}
-		eval_set(sur_check);
+		eval_set(sur_check, false);
 		board.get_tile(x,y)->apply_fp(9);
 		if(x_fix){
 			eval_set(to_check, true);
@@ -147,121 +264,8 @@ void game::eval_tile(int x, int y, coord* origin, bool x_fix){
 	}
 }
 
-void game::eval_set(coord_set* in){
+void game::eval_set(coord_set* in, bool ex_fix){
 	for(int i = 0; i < in->get_size(); i++){
-		eval_tile(in->get_coord(i)->get_x(), in->get_coord(i)->get_y(), in->get_coord(i), false);
+		eval_tile(in->get_coord(i), ex_fix);
 	}
-}
-
-void game::eval_set(coord_set* in, bool x_fix){
-	for(int i = 0; i < in->get_size(); i++){
-		eval_tile(in->get_coord(i)->get_x(), in->get_coord(i)->get_y(), in->get_coord(i), x_fix);
-	}
-}
-
-// uses "wasd" controls
-int game::move_player(std::string in){
-	int mov_x = user.get_x(), mov_y = user.get_y();
-	int moved = 0;
-	if(in == "w"){
-		if(mov_y!= max_y - 1){
-			int tile_cond = board.get_cond(mov_x, mov_y + 1);
-			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.has_mask()))){
-				user.move_up();
-				moved = 1;
-			}else if(tile_cond == 3){
-				board.get_tile(mov_x, mov_y + 1)->apply_fp(4);
-				moved = 1;
-			}
-		}
-	}else if(in == "s"){
-		if(mov_y!= 0){
-			int tile_cond = board.get_cond(mov_x, mov_y - 1);
-			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.has_mask()))){
-				user.move_down();
-				moved = 1;
-			}else if(tile_cond == 3){
-				board.get_tile(mov_x, mov_y - 1)->apply_fp(4);
-				moved = 1;
-			}
-		}
-	}else if (in == "a"){
-		if(mov_x!= 0){
-			int tile_cond = board.get_cond(mov_x - 1, mov_y);
-			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.has_mask()))){
-				user.move_left();
-				moved = 1;
-			}else if(tile_cond == 3){
-				board.get_tile(mov_x - 1, mov_y)->apply_fp(4);
-				moved = 1;
-			}
-		}
-	}else if (in == "d"){
-		if(mov_x != max_x - 1){
-			int tile_cond = board.get_cond(mov_x + 1, mov_y);
-			if((tile_cond == 4) || (tile_cond == 6) || (tile_cond == 7) || ((tile_cond == 0) & (user.has_mask()))){
-				user.move_right();
-				moved = 1;
-			}else if(tile_cond == 3){
-				board.get_tile(mov_x + 1, mov_y)->apply_fp(4);
-				moved = 1;
-			}
-		}
-	}else{
-		moved = 0;
-	}
-
-	if(moved & (board.get_tile(user.get_x(), user.get_y())->has_mask())){
-		user.get_mask();
-		board.get_tile(user.get_x(), user.get_y())->set_mask(false);
-	}else if(moved & (board.get_tile(user.get_x(), user.get_y())->is_exit())){
-		moved = 2;
-	}
-	return moved;
-}
-
-void game::set_exit(int x, int y){
-	board.get_tile(x,y)->make_exit();
-}
-
-void game::set_mask(int x, int y){
-	board.get_tile(x,y)->set_mask(true);
-}
-
-void game::set_user(int x, int y){
-	user.set_x(x);
-	user.set_y(y);
-}
-
-void game::print_map(){
-	std::string symbols = "SF#|/=_ X0DB";
-	std::cout << "Turn: " << turn_count << std::endl;
-	if(user.has_mask()){
-		std::cout << "Player has a smoke mask.\n";
-	}else{
-		std::cout << "Player does not have a smoke mask.\n";
-	}
-	for(int i = max_y; i >= -1; i--){
-		for(int j = -1; j <= max_x; j++){
-			if(i == max_y || i == -1){
-				std::cout << "II";
-			}else if(j == -1 || j == max_x){
-				std::cout << "II";
-			}else{
-				if((user.get_x() == j) & (user.get_y() == i)){
-					std::cout << "P ";
-				}else if(board.get_tile(j,i)->has_mask()){
-					std::cout << "MM";
-				}else if(board.get_tile(j,i)->is_exit()){
-					std::cout << "EE";
-				}else{
-					std::cout << symbols[board.get_tile(j,i)->get_cond()];
-					std::cout << symbols[board.get_tile(j,i)->get_cond()];
-				}
-				//std::cout << " ";
-			}
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
 }

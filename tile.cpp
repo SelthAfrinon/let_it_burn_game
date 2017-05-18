@@ -7,6 +7,7 @@
 
 #include "tile.h"
 
+// initializers
 tile::tile(coord* in_pos){
 	x = in_pos->get_x();
 	y = in_pos->get_y();
@@ -23,22 +24,7 @@ tile::tile(int in_x, int in_y){
 	exit = false;
 }
 
-tile::tile(coord* in_pos, bool in_mask, bool is_exit){
-	x = in_pos->get_x();
-	y = in_pos->get_y();
-	cond = 7;
-	mask = in_mask;
-	exit = is_exit;
-}
-
-tile::tile(int in_x, int in_y, bool in_mask, bool is_exit){
-	x = in_x;
-	y = in_y;
-	cond = 7;
-	mask = in_mask;
-	exit = is_exit;
-}
-
+// functions to change tile behavior
 void tile::apply_smoke(){
 	if(cond == 7){
 		cond = 0;
@@ -53,6 +39,15 @@ void tile::apply_fp(int type){
 		cond = type;
 }
 
+void tile::set_mask(bool in){
+	mask = in;
+}
+
+void tile::make_exit(){
+	exit = true;
+}
+
+// functions to get information on the tile
 coord* tile::get_coord(){
 	return new coord(x,y);
 }
@@ -69,18 +64,10 @@ int tile::get_cond(){
 	return cond;
 }
 
-void tile::set_mask(bool in){
-	mask = in;
-}
-
-bool tile::has_mask(){
+bool tile::get_mask(){
 	return mask;
 }
 
-void tile::make_exit(){
-	exit = true;
-}
-
-bool tile::is_exit(){
+bool tile::get_exit(){
 	return exit;
 }

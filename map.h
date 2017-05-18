@@ -15,16 +15,24 @@ class map{
 private:
 	int max_x, max_y;
 	std::vector<tile*> tiles;
-	tile* find_tile(int, int);
+
+	tile* 	find_tile(int, int);
 
 public:
+	// constructors
 	map();
 	map(int, int);
-	void add_tile(tile*);
-	tile* get_tile(coord*);
-	tile* get_tile(int, int);
-	int get_cond(int,int);
-	int get_size();
+
+	// manipulators
+	void 	add_tile(tile*);
+
+	// getters
+	tile* 	get_tile(coord*);
+	tile*	get_tile(int, int);
+	int 	get_cond(int,int);
+	int 	get_size();
+
+	// deconstructor
 	~map() {}
 
 };
