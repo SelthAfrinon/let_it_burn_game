@@ -13,7 +13,7 @@ game::game(int x, int y):board(x, y),user(0,0){
 
 	max_x = x;
 	max_y = y;
-	turn_count = 0;
+	turn_count = 1;
 }
 
 // Setters
@@ -39,8 +39,7 @@ void game::fill_tile(int x, int y, int cond){
 
 void game::smoke_tile(int x, int y){
 	board.get_tile(x,y)->apply_smoke();
-	turn_count++;
-	eval_tile(new coord(x,y), true);
+	eval_tile(board.get_tile(x,y), true);
 
 }
 
@@ -115,6 +114,10 @@ int game::move_player(std::string in){
 	return moved;
 }
 
+void game::inc_turn(){
+	turn_count++;
+}
+
 std::string game::print_map(){
 	std::string symbols = "SF#|/=_ X0DB";
 	char buffer[50];
@@ -154,118 +157,114 @@ std::string game::print_map(){
 
 // Tile Evaluators
 
-void game::eval_tile(coord* origin, bool x_fix){
-	tile* cur_tile = board.get_tile(origin);
+void game::eval_tile(tile* cur_tile, bool x_fix){
 	int cond = cur_tile->get_cond(),
 			x = cur_tile->get_x(),
 			y = cur_tile->get_y();
-	coord_set* to_check = new coord_set();
+	tile_set to_check = tile_set();
+	tile* check_tile;
 
 	if(x != 0){
-		to_check->add_coord(new coord(x - 1, y));
+		to_check.add_tile(board.get_tile(x - 1, y));
 	}
 
 	if((y != 0)){
-		to_check->add_coord(new coord(x, y - 1));
+		to_check.add_tile(board.get_tile(x, y - 1));
 	}
 
 	if((x != max_x - 1)){
-		to_check->add_coord(new coord(x + 1, y));
+		to_check.add_tile(board.get_tile(x + 1, y));
 	}
 
 	if((y != max_y - 1)){
-		to_check->add_coord(new coord(x, y + 1));
+		to_check.add_tile(board.get_tile(x, y + 1));
 	}
 
 	if(cond == 0){
-		tile* check_tile;
-		coord_set* sur_check = new coord_set();
+		tile_set sur_check = tile_set();
 		bool is_smoked = false;
-		for(int i = 0; i < to_check->get_size(); i++){
-			check_tile = board.get_tile(to_check->get_coord(i));
+		for(int i = 0; i < to_check.get_size(); i++){
+			check_tile = to_check.get_tile(i);
 			if((check_tile->get_cond() == 1) & !is_smoked){
 				cur_tile->apply_smoke();
 				is_smoked = true;
-				for(int j = 0; j < to_check->get_size(); j++){
-					check_tile = board.get_tile(to_check->get_coord(j));
+				for(int j = 0; j < to_check.get_size(); j++){
+					check_tile = to_check.get_tile(j);
 					if(check_tile->get_cond() == 0){
-						sur_check->add_coord(check_tile->get_coord());
+						sur_check.add_tile(check_tile);
 					}
 				}
 			}else if(check_tile->get_cond() == 6){
-				sur_check ->add_coord(check_tile->get_coord());
+				sur_check.add_tile(check_tile);
 			}
-			eval_set(sur_check, false);
+			eval_set(&sur_check, false);
 		}
 	}else if(cond == 1){
-		tile* check_tile;
-		coord_set* sur_check = new coord_set();
-		for(int i = 0; i < to_check->get_size(); i++){
-			check_tile = board.get_tile(to_check->get_coord(i));
+		tile_set sur_check = tile_set();
+		for(int i = 0; i < to_check.get_size(); i++){
+			check_tile = to_check.get_tile(i);
 			if(check_tile->get_cond() == 0 || check_tile->get_cond() == 6){
-				sur_check->add_coord(check_tile->get_coord());
+				sur_check.add_tile(check_tile);
 			}
 		}
-		eval_set(sur_check, false);
+		eval_set(&sur_check, false);
 	}else if(cond == 6){
-		tile* check_tile;
-		for(int i = 0; i < to_check->get_size(); i++){
-			check_tile = board.get_tile(to_check->get_coord(i));
+		for(int i = 0; i < to_check.get_size(); i++){
+			check_tile = to_check.get_tile(i);
 			if(check_tile->get_cond() == 1){
-				coord_set* sur_check = new coord_set();
-				for(int j = 0; j < to_check->get_size(); j++){
-					check_tile = board.get_tile(to_check->get_coord(j));
+				tile_set sur_check = tile_set();
+				for(int j = 0; j < to_check.get_size(); j++){
+					check_tile = to_check.get_tile(j);
 					if(check_tile->get_cond() == 0){
 						check_tile->apply_smoke();
-						sur_check->add_coord(check_tile->get_coord());
+						sur_check.add_tile(check_tile);
 					}
 				}
-				eval_set(sur_check, false);
+				eval_set(&sur_check, false);
 				break;
 			}
 		}
 	}else if(cond == 8){
-		tile* check_tile;
-		coord_set* sur_check = new coord_set();
-		for(int i = 0; i < to_check->get_size(); i++){
-			check_tile = board.get_tile(to_check->get_coord(i));
+		tile_set sur_check = tile_set();
+		for(int i = 0; i < to_check.get_size(); i++){
+			check_tile = to_check.get_tile(i);
 			if(check_tile->get_cond() == 1 || check_tile->get_cond() == 0){
 				check_tile->apply_smoke();
-				sur_check->add_coord(check_tile->get_coord());
+				sur_check.add_tile(check_tile);
 			}else if(check_tile->get_cond() == 2){
 				check_tile->apply_fp(10);
 			}else if(check_tile->get_cond() == 3 || check_tile->get_cond() == 4 || check_tile->get_cond() == 5){
 				check_tile->apply_fp(11);
 			}else if(check_tile->get_cond() == 6){
 				check_tile->apply_fp(1);
-				sur_check->add_coord(check_tile->get_coord());
+				sur_check.add_tile(check_tile);
 			}
 		}
-		eval_set(sur_check, false);
+		eval_set(&sur_check, false);
 		board.get_tile(x,y)->apply_fp(9);
 		if(x_fix){
-			eval_set(to_check, true);
+			eval_set(&to_check, true);
 		}
 	}else if((cond == 9) & x_fix){
-		tile* check_tile;
-		coord_set* sur_check = new coord_set();
+		tile_set sur_check = tile_set();
 		cur_tile->apply_fp(1);
-		for(int i = 0; i < to_check->get_size(); i++){
-			check_tile = board.get_tile(to_check->get_coord(i));
+		for(int i = 0; i < to_check.get_size(); i++){
+			check_tile = to_check.get_tile(i);
 			if(check_tile->get_cond() == 9){
-				sur_check->add_coord(check_tile->get_coord());
+				sur_check.add_tile(check_tile);
 			}else if(check_tile->get_cond() == 10){
 				check_tile->apply_fp(5);
 			}else if(check_tile->get_cond() == 11){
 				check_tile->apply_fp(6);
 			}
 		}
-		eval_set(sur_check, true);
+		eval_set(&sur_check, true);
 	}
+	delete check_tile;
 }
 
-void game::eval_set(coord_set* in, bool ex_fix){
+void game::eval_set(tile_set* in, bool ex_fix){
 	for(int i = 0; i < in->get_size(); i++){
-		eval_tile(in->get_coord(i), ex_fix);
+		eval_tile(in->get_tile(i), ex_fix);
 	}
 }

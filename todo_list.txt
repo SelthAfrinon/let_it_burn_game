@@ -33,3 +33,23 @@ Let it Burn Game to do list
 			+ Cannot be Player or mask tile. Can be Exit tile.
 			
 	+ Add ability for fire to destroy masks if the mask has fire on any side.
+	
+2017-05-19
+	+ Change coord_set to tile_set.
+		+ tile_set saves tile pointers. These are accessed directly instead of having to get the tile using its coordinates.
+		+ removes need for coord and coord_set.
+		- Done.
+		
+2017-05-20
+	+ Change main's creation of cur_game from aggregation to composition.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

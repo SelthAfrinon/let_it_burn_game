@@ -12,8 +12,6 @@
 #include <cstdlib>
 #include <string>
 
-#include "coord.h"
-#include "coord_set.h"
 #include "tile.h"
 #include "map.h"
 #include "game.h"
@@ -61,8 +59,9 @@ int main() {
 	// Start player turn
 	string move;
 	int has_moved = 1;
-	cout << cur_game->print_map();
+
 	do{
+		cout << cur_game->print_map();
 		do{
 			if(has_moved == 0){
 				cout << "Obstruction in the way!\nEnter another direction: ";
@@ -73,7 +72,7 @@ int main() {
 			cout << endl;
 			has_moved = cur_game->move_player(move);
 		}while(has_moved == 0);
-		cout << cur_game->print_map();
+		cur_game->inc_turn();
 	}while((has_moved != 2) & (has_moved != 3));
 
 	if(has_moved == 3){

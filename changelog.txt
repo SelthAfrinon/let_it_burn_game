@@ -69,9 +69,22 @@ Let it Burn Game change log
 	- Changed "game::print_map()" to return a string.
 		- Changed main to correctly display the returned string.
 	
+2017-05-19
+	- Began checking classes for where composition is more appropriate than aggreagation.
+		- Finished checking and adapting "map" class.
+	- Added default constructor for "tile" class.
+	- Removed extraneous constructors for "tile" class.
 	
-	
-	
+2017-05-20
+	- Added "tile_set" class to replace "coord_set" and "coord."
+	- Changed "game" class to use tile_sets instead of coord_sets. Program works as expected.
+	- Looked over "game" class and changed some objects to composition: to_check, sur_check, tile_check were made composition instead of aggregation.
+	- Changed "eval_..." functions in "game" class to use tile_sets.
+	- Removed references to and functions which depended on coord_set and coord classes.
+	- Deleted coord_set and coord classes. Farewell.
+	- Removed unneccessary library inclusion "iostream" from "game" class.
+	- Added "game::inc_turn()" to keep track of turn count.
+		- Added function to main to keep track of turns.
 	
 	
 	

@@ -8,8 +8,6 @@
 #ifndef TILE_H_
 #define TILE_H_
 
-#include "coord.h"
-
 class tile{
 private:
 	/*  S = 0	(Smoke)
@@ -25,7 +23,7 @@ private:
 	bool mask, exit;
 public:
 	// initializers set up tile location.
-	tile(coord*);
+	tile();
 	tile(int, int);
 
 	// setters to set smoke, general floorplan pieces, mask status, and exit status.
@@ -35,7 +33,6 @@ public:
 	void make_exit();
 
 	// gettter functions to get information of tile.
-	coord* get_coord();
 	int get_x();
 	int get_y();
 	int get_cond();

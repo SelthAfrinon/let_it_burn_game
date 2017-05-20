@@ -8,13 +8,12 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <iostream>
 #include <string>
 #include <stdio.h> // for std::sprintf
 
 #include "map.h"
-#include "coord_set.h"
 #include "player.h"
+#include "tile_set.h"
 
 class game{
 private:
@@ -23,8 +22,8 @@ private:
 	player user;
 
 	// Tile Evaluators
-	void 	eval_tile(coord*, bool);
-	void 	eval_set(coord_set*, bool);
+	void 	eval_tile(tile*, bool);
+	void 	eval_set(tile_set*, bool);
 
 
 public:
@@ -41,6 +40,7 @@ public:
 	void 	smoke_tile(int, int);
 	void 	smoke_all();
 	int 	move_player(std::string);
+	void	inc_turn();
 	std::string 	print_map();
 
 	// Destructor

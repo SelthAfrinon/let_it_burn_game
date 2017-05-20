@@ -14,7 +14,7 @@
 class map{
 private:
 	int max_x, max_y;
-	std::vector<tile*> tiles;
+	std::vector<tile> tiles;
 
 	tile* 	find_tile(int, int);
 
@@ -27,7 +27,6 @@ public:
 	void 	add_tile(tile*);
 
 	// getters
-	tile* 	get_tile(coord*);
 	tile*	get_tile(int, int);
 	int 	get_cond(int,int);
 	int 	get_size();

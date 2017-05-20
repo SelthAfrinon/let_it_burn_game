@@ -7,10 +7,10 @@
 
 #include "tile.h"
 
-// initializers
-tile::tile(coord* in_pos){
-	x = in_pos->get_x();
-	y = in_pos->get_y();
+// constructors
+tile::tile(){
+	x = 0;
+	y = 0;
 	cond = 7;
 	mask = false;
 	exit = false;
@@ -48,9 +48,6 @@ void tile::make_exit(){
 }
 
 // functions to get information on the tile
-coord* tile::get_coord(){
-	return new coord(x,y);
-}
 
 int tile::get_x(){
 	return x;
