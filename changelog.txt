@@ -86,7 +86,10 @@ Let it Burn Game change log
 	- Added "game::inc_turn()" to keep track of turn count.
 		- Added function to main to keep track of turns.
 	
-	
+2017-06-16
+	- Continued creation of new tile organization
+		- Added wall_tile and broken_wall classes
+		- Already had i_tile, tile, empty_tile, and combustion_tile classes created previously.
 	
 	
 	

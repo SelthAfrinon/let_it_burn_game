@@ -9,7 +9,7 @@
 #define MAP_H_
 
 #include <vector>
-#include "tile.h"
+//#include "tile.h"
 
 class map{
 private:

@@ -11,40 +11,9 @@
 tile::tile(){
 	x = 0;
 	y = 0;
-	cond = 7;
-	mask = false;
-	exit = false;
-}
-
-tile::tile(int in_x, int in_y){
-	x = in_x;
-	y = in_y;
-	cond = 7;
-	mask = false;
-	exit = false;
-}
-
-// functions to change tile behavior
-void tile::apply_smoke(){
-	if(cond == 7){
-		cond = 0;
-	}else if(cond == 0){
-		cond = 1;
-	}else if(cond == 1){
-		cond = 8;
-	}
-}
-
-void tile::apply_fp(int type){
-		cond = type;
-}
-
-void tile::set_mask(bool in){
-	mask = in;
-}
-
-void tile::make_exit(){
-	exit = true;
+	cond = 0;
+	type = 0;
+	visual = "";
 }
 
 // functions to get information on the tile
@@ -61,10 +30,14 @@ int tile::get_cond(){
 	return cond;
 }
 
-bool tile::get_mask(){
-	return mask;
+int tile::get_type(){
+	return type;
 }
 
-bool tile::get_exit(){
-	return exit;
+std::string tile::get_visual(){
+	return visual;
+}
+
+i_tile* tile::activate(int){
+	return NULL;
 }
