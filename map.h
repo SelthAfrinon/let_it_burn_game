@@ -9,14 +9,15 @@
 #define MAP_H_
 
 #include <vector>
-//#include "tile.h"
+#include "i_tile.h"
+#include "tile.h"
 
 class map{
 private:
 	int max_x, max_y;
-	std::vector<tile> tiles;
+	std::vector<i_tile*> tiles;
 
-	tile* 	find_tile(int, int);
+	i_tile* 	find_tile(int, int);
 
 public:
 	// constructors
@@ -24,10 +25,10 @@ public:
 	map(int, int);
 
 	// manipulators
-	void 	add_tile(tile*);
+	void 	add_tile(i_tile*);
 
 	// getters
-	tile*	get_tile(int, int);
+	i_tile*	get_tile(int, int);
 	int 	get_cond(int,int);
 	int 	get_size();
 

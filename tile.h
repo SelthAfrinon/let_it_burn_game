@@ -12,7 +12,7 @@
 #include <string>
 
 class tile : public i_tile{
-private:
+protected:
 	int cond, type, x, y;
 	std::string visual;
 
@@ -20,6 +20,7 @@ private:
 public:
 	// initializers set up tile location.
 	tile();
+	tile(int, int);
 	int get_x();
 	int get_y();
 	int get_cond();

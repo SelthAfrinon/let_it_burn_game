@@ -16,6 +16,14 @@ tile::tile(){
 	visual = "";
 }
 
+tile::tile(int x, int y){
+	this->x = x;
+	this->y = y;
+	cond = 0;
+	type = 0;
+	visual = "";
+}
+
 // functions to get information on the tile
 
 int tile::get_x(){

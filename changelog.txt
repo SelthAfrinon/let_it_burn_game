@@ -82,7 +82,7 @@ Let it Burn Game change log
 	- Changed "eval_..." functions in "game" class to use tile_sets.
 	- Removed references to and functions which depended on coord_set and coord classes.
 	- Deleted coord_set and coord classes. Farewell.
-	- Removed unneccessary library inclusion "iostream" from "game" class.
+	- Removed unnecessary library inclusion "iostream" from "game" class.
 	- Added "game::inc_turn()" to keep track of turn count.
 		- Added function to main to keep track of turns.
 	
@@ -91,5 +91,9 @@ Let it Burn Game change log
 		- Added wall_tile and broken_wall classes
 		- Already had i_tile, tile, empty_tile, and combustion_tile classes created previously.
 	
+2017-06-17
+	- Added door_tile and exit_tile classes.
 	
+2017-06-18
+	- Modified map class to use i_tile pointers instead of tiles.
 	
